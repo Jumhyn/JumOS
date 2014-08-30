@@ -1,3 +1,5 @@
+.section .text
+	
 .global isr0
 .global isr1
 .global isr2
@@ -36,85 +38,85 @@ isr0:
 	cli
 	push	$0x00
 	push	$0x00
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr1:
 	cli
 	push	$0x00
 	push	$0x01
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr2:
 	cli
 	push	$0x00
 	push	$0x02
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr3:
 	cli
 	push	$0x00
 	push	$0x03
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr4:
 	cli
 	push	$0x00
 	push	$0x04
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr5:
 	cli
 	push	$0x00
 	push	$0x05
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr6:
 	cli
 	push	$0x00
 	push	$0x06
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr7:
 	cli
 	push	$0x00
 	push	$0x07
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr8:
 	cli
 	push	$0x08
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr9:
 	cli
 	push	$0x00
 	push	$0x09
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 	
 isr10:
 	cli
 	push	$0x0A
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr11:
 	cli
 	push	$0x0B
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr12:
 	cli
 	push	$0x0C
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr13:
 	cli
 	push	$0x0D
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr14:
 	cli
 	push	$0x0E
-	jmpl	isr_common_stub
+	jmp	isr_common_stub
 
 isr15:
 	cli
@@ -234,7 +236,7 @@ isr_common_stub:
 	movl	%esp, %eax
 	pushl	%eax
 	movl	$fault_handler, %eax
-	calll	%eax
+	calll	*%eax
 	popl	%eax
 	pop	%gs
 	pop	%fs

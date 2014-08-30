@@ -1,12 +1,7 @@
-#if !defined(__cplusplus)
-#include <stdbool.h>
-#endif
-#include <stddef.h>
-#include <stdint.h>
+#ifndef _GDT_H
+#define _GDT_H
 
-#if defined(__linux__)
-#error "You suck! Cross-compile!"
-#endif
+#include "system.h"
 
 struct gdt_entry {
   uint16_t limit_low;
@@ -22,7 +17,7 @@ struct gdt_ptr {
   struct gdt_entry *base;
 }__attribute__((packed));
 
-struct gdt_entry gdt[3];
-struct gdt_ptr gp;
-
 extern void gdt_flush();
+void gdt_install();
+
+#endif

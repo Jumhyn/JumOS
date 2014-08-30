@@ -1,5 +1,6 @@
 #ifndef _SYSTEM_H
 #define _SYSTEM_H
+
 #if !defined(__cplusplus)
 #include <stdbool.h>
 #endif
@@ -21,10 +22,5 @@ uint8_t *memcpy(uint8_t *, uint8_t *, size_t);
 uint8_t *memset(uint8_t *, size_t, uint8_t);
 uint16_t *memsetw(uint16_t *, size_t, uint16_t);
 size_t strlen(const char *);
-
-void gdt_install();
-void idt_install();
-void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
-void isrs_install();
 
 #endif

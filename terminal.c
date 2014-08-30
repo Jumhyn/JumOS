@@ -42,18 +42,18 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
 
 void terminal_putchar(char c) {
   if (c == '\n') {
-    if (++terminal_row == VGA_HEIGHT) {
-      terminal_scrolldisplay();
-      terminal_row--;
-    }
     terminal_column = 0;
+    if (++terminal_row >= VGA_HEIGHT) {
+      terminal_row--;
+      terminal_scrolldisplay();
+    }
     return;
   }
-  if (terminal_column == VGA_WIDTH) {
+  if (terminal_column >= VGA_WIDTH) {
     terminal_column = 0;
-    if (++terminal_row == VGA_HEIGHT) {
-      terminal_scrolldisplay();
+    if (++terminal_row >= VGA_HEIGHT) {
       terminal_row--;
+      terminal_scrolldisplay();
     }
   }
   terminal_putentryat(c, terminal_color, terminal_column++, terminal_row);
@@ -66,23 +66,17 @@ void terminal_writestring(const char *data) {
   }
 }
 
-void terminal_writeint(size_t val) {
-  if (val > 0) {
+void terminal_writeint(uint32_t val) {
+  if (val / 10 > 0) {
     terminal_writeint(val / 10);
-    terminal_putchar('0' + val % 10);
   }
+  terminal_putchar('0' + val % 10);
 }
 
 void terminal_scrolldisplay() {
-  for (size_t y = 1; y < VGA_HEIGHT; y++) {
-    for (size_t x = 0; x < VGA_WIDTH; x++) {
-      size_t index_to = (y - 1) * VGA_WIDTH + x;
-      size_t index_from = y * VGA_WIDTH + x;
-      terminal_buffer[index_to] = terminal_buffer[index_from];
-      if (y == VGA_HEIGHT - 1) {
-        terminal_putentryat(' ', terminal_color, x, y);
-      }
-    }
+  memcpy((uint8_t *)&terminal_buffer[0], (uint8_t *)&terminal_buffer[VGA_WIDTH], sizeof(terminal_buffer[0]) * VGA_WIDTH * (VGA_HEIGHT-1));
+  for (size_t col = 0; col < VGA_WIDTH; col++) {
+    terminal_putentryat(' ', terminal_color, col, VGA_HEIGHT-1);
   }
 }
 

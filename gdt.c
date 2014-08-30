@@ -1,34 +1,7 @@
-#if !defined(__cplusplus)
-#include <stdbool.h>
-#endif
-#include <stddef.h>
-#include <stdint.h>
-
-#if defined(__linux__)
-#error "You suck! Cross-compile!"
-#endif
-
-extern void terminal_writestring();
-extern void terminal_initialize();
-
-struct gdt_entry {
-  uint16_t limit_low;
-  uint16_t base_low;
-  uint8_t base_middle;
-  uint8_t access;
-  uint8_t granularity;
-  uint8_t base_high;
-}__attribute__((packed));
-
-struct gdt_ptr {
-  uint16_t limit;
-  uint32_t base;
-}__attribute__((packed));
+#include "gdt.h"
 
 struct gdt_entry gdt[3];
 struct gdt_ptr gp;
-
-extern void gdt_flush(struct gdt_ptr *);
 
 void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
   gdt[num].base_low = (base & 0xFFFF);
@@ -44,7 +17,7 @@ void gdt_set_gate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access, u
 
 void gdt_install() {
   gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-  gp.base = (uint32_t) &gdt;
+  gp.base = gdt;
 
   gdt_set_gate(0, 0, 0, 0, 0);
   gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
