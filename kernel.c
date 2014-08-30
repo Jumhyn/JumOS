@@ -15,8 +15,7 @@ void kernel_main() {
   terminal_initialize();
   terminal_writestring("Hello, kernel World!\n");
   terminal_writestring("Newlines Work!\n");
-  uint32_t count = 0;
-  for (; count < 20; count++) {
+  for (uint32_t count = 0; count < 50; count++) {
     terminal_putchar('c');
     terminal_putchar(' ');
     terminal_writeint(count);
