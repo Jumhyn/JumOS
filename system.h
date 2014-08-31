@@ -22,5 +22,6 @@ uint8_t *memcpy(uint8_t *, uint8_t *, size_t);
 uint8_t *memset(uint8_t *, size_t, uint8_t);
 uint16_t *memsetw(uint16_t *, size_t, uint16_t);
 size_t strlen(const char *);
+static inline void outb(uint16_t, uint8_t);
 
 #endif
