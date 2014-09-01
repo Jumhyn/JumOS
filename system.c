@@ -1,4 +1,5 @@
 #include "system.h"
+#include "terminal.h"
 
 uint8_t *memcpy(uint8_t *dest, uint8_t *src, size_t size) {
   for (size_t i = 0; i < size; i++) {
@@ -29,6 +30,13 @@ size_t strlen(const char *str) {
   return ret;
 }
 
-static inline void outb(uint16_t port, uint8_t val) {
-    asm volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
+void panic(const char *file, uint32_t line, const char *reason) {
+  asm volatile ("cli");
+  terminal_writestring("KERNEL PANIC in ");
+  terminal_writestring(file);
+  terminal_writestring(" on line ");
+  terminal_writeint(line);
+  terminal_writestring("\n");
+  terminal_writestring(reason);
+  for(;;);
 }

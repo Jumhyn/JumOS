@@ -3,6 +3,8 @@
 #include "gdt.h"
 #include "idt.h"
 #include "isrs.h"
+#include "paging.h"
+#include "time.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -13,13 +15,11 @@ void kernel_main() {
   idt_install();
   isrs_install();
   terminal_initialize();
+  paging_initialize();
+  timer_initialize(50);
+
   terminal_writestring("Hello, kernel World!\n");
   terminal_writestring("Newlines Work!\n");
-  for (uint32_t count = 0; count < 100; count++) {
-    terminal_putchar('c');
-    terminal_putchar(' ');
-    terminal_writeint(count);
-    terminal_putchar('\n');
-  }
-  terminal_writestring("Scrolling works!\n");
+
+  PANIC("kernel main finished!");
 }

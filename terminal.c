@@ -73,6 +73,21 @@ void terminal_writeint(uint32_t val) {
   terminal_putchar('0' + val % 10);
 }
 
+void terminal_writehex(uint32_t val, uint8_t prefix) {
+  if (prefix) {
+    terminal_writestring("0x");
+  }
+  if (val / 16 > 0) {
+    terminal_writehex(val / 16, 0);
+  }
+  if (val % 16 < 10) {
+    terminal_putchar('0' + val % 16);
+  }
+  else {
+    terminal_putchar('A' + val % 16 - 10);
+  }
+}
+
 void terminal_scrolldisplay() {
   memcpy((uint8_t *)&terminal_buffer[0], (uint8_t *)&terminal_buffer[VGA_WIDTH], sizeof(terminal_buffer[0]) * VGA_WIDTH * (VGA_HEIGHT-1));
   for (size_t col = 0; col < VGA_WIDTH; col++) {

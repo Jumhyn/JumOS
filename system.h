@@ -11,6 +11,8 @@
 #error "You suck! Cross-compile!"
 #endif
 
+#define PANIC(x) panic(__FILE__, __LINE__, x)
+
 struct regs {
   uint32_t gs, fs, es, ds;
   uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
@@ -22,6 +24,16 @@ uint8_t *memcpy(uint8_t *, uint8_t *, size_t);
 uint8_t *memset(uint8_t *, size_t, uint8_t);
 uint16_t *memsetw(uint16_t *, size_t, uint16_t);
 size_t strlen(const char *);
-static inline void outb(uint16_t, uint8_t);
+void panic(const char *, uint32_t, const char *);
+
+static inline void outb(uint16_t port, uint8_t val) {
+  asm volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
+}
+
+static inline uint8_t inb(uint16_t port) {
+    uint8_t ret;
+    asm volatile ("inb %1, %0" : "=a"(ret) : "Nd"(port));
+    return ret;
+}
 
 #endif

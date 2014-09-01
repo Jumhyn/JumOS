@@ -30,5 +30,6 @@ void terminal_putentryat(char, uint8_t, size_t, size_t);
 void terminal_putchar(char);
 void terminal_writestring(const char *);
 void terminal_writeint(size_t);
+void terminal_writehex(uint32_t, uint8_t);
 
 #endif
