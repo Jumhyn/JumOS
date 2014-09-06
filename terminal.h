@@ -1,6 +1,9 @@
 #ifndef _TERMINAL_H
 #define _TERMINAL_H
 #include "system.h"
+#include "kb.h"
+
+#define putch(x) terminal_putchar(x)
 
 enum vga_color {
   COLOR_BLACK = 0,
@@ -31,5 +34,7 @@ void terminal_putchar(char);
 void terminal_writestring(const char *);
 void terminal_writeint(size_t);
 void terminal_writehex(uint32_t, uint8_t);
+
+void terminal_handle_kb_event(struct kb_event);
 
 #endif

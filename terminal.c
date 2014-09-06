@@ -26,7 +26,7 @@ void terminal_initialize() {
   for (size_t y = 0; y < VGA_HEIGHT; y++) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {
       const size_t index = y * VGA_WIDTH + x;
-      terminal_buffer[index] = make_vgaentry(' ', terminal_color);
+      terminal_buffer[index] = make_vgaentry('\0', terminal_color);
     }
   }
 }
@@ -59,6 +59,19 @@ void terminal_putchar(char c) {
   terminal_putentryat(c, terminal_color, terminal_column++, terminal_row);
 }
 
+void terminal_deletechar() {
+  if (terminal_column > 0) {
+    terminal_column--;
+  }
+  else if (terminal_row > 0) {
+    terminal_row--;
+    size_t index;
+    for (index = terminal_row * VGA_WIDTH; terminal_buffer[index] != '\0' && index < (terminal_row + 1) * VGA_WIDTH; index++);
+    terminal_column = (index-1) % VGA_WIDTH;
+  }
+  terminal_putentryat('\0', terminal_color, terminal_column, terminal_row);
+}
+
 void terminal_writestring(const char *data) {
   size_t datalen = strlen(data);
   for (size_t i = 0; i < datalen; i++) {
@@ -85,6 +98,15 @@ void terminal_writehex(uint32_t val, uint8_t prefix) {
   }
   else {
     terminal_putchar('A' + val % 16 - 10);
+  }
+}
+
+void terminal_handle_kb_event(struct kb_event event) {
+  if (event.ascii && event.type == KB_EVENT_PRESS) {
+    putch(event.ascii);
+  }
+  else if (event.keycode == 0x0E && event.type == KB_EVENT_PRESS) {
+    terminal_deletechar();
   }
 }
 

@@ -5,6 +5,7 @@
 #include "isrs.h"
 #include "paging.h"
 #include "time.h"
+#include "kb.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -16,10 +17,13 @@ void kernel_main() {
   isrs_install();
   terminal_initialize();
   paging_initialize();
-  timer_initialize(50);
+  //timer_initialize(50);
+  kb_initialize();
 
   terminal_writestring("Hello, kernel World!\n");
   terminal_writestring("Newlines Work!\n");
+
+  for(;;);
 
   PANIC("kernel main finished!");
 }

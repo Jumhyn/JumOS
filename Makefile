@@ -2,7 +2,7 @@ CC=i586-elf-gcc
 AS=i586-elf-as
 CFLAGS=-Wall -Wextra -O2 -ffreestanding -lgcc -nostdlib
 CFLAGS2=-std=gnu99
-CSOURCES=kernel.c gdt.c system.c idt.c isrs.c terminal.c time.c paging.c kheap.c
+CSOURCES=kernel.c gdt.c system.c idt.c isrs.c terminal.c time.c paging.c kheap.c kb.c
 ASSOURCES=boot.s interrupt.s
 OBJECTS=$(CSOURCES:.c=.o) $(ASSOURCES:.s=.o)
 EXECUTABLE=jumos.bin
@@ -34,4 +34,4 @@ clean:
 	rm -rf $(OBJECTS) $(EXECUTABLE)
 	rm -rf *~
 	rm -rf \#*\#
-	rm -rf $(PACKAGE)
+
