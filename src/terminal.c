@@ -66,8 +66,12 @@ void terminal_deletechar() {
   else if (terminal_row > 0) {
     terminal_row--;
     size_t index;
-    for (index = terminal_row * VGA_WIDTH; terminal_buffer[index] != '\0' && index < (terminal_row + 1) * VGA_WIDTH; index++);
+    //TODO: Fix this algorithm to handle repeated newlines more elegantly
+    for (index = terminal_row * VGA_WIDTH; (terminal_buffer[index] & 0xFF) != '\0' && index < (terminal_row + 1) * VGA_WIDTH; index++);
     terminal_column = (index-1) % VGA_WIDTH;
+    if (index % VGA_WIDTH == 0 && index == terminal_row * VGA_WIDTH) {
+      terminal_column = 0;
+    }
   }
   terminal_putentryat('\0', terminal_color, terminal_column, terminal_row);
 }
